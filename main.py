@@ -139,8 +139,24 @@ graph.add_edge("itinerary_agent", "final_agent")
 graph.add_edge("final_agent", END)
 
 
+# ---------------------------------------------------------------------------
 # Persistent connection so both CLI and Streamlit can share the compiled app
-_conn = psycopg.connect(DATABASE_URL)
+#
+# CHANGES FROM ORIGINAL:
+# 1. autocommit=True  -> PostgresSaver.setup() runs migration DDL that cannot
+#    run inside an open transaction block. Without this you get:
+#    psycopg.errors.ActiveSqlTransaction
+# 2. prepare_threshold=None -> disables psycopg's server-side prepared
+#    statements. Needed because Neon's pooled endpoint (pgbouncer-style)
+#    does not support prepared statements reliably. If you switch
+#    DATABASE_URL to Neon's DIRECT (non "-pooler") connection string,
+#    this isn't strictly required, but it's harmless to leave in either way.
+# ---------------------------------------------------------------------------
+_conn = psycopg.connect(
+    DATABASE_URL,
+    autocommit=True,
+    prepare_threshold=None,
+)
 checkpointer = PostgresSaver(_conn)
 checkpointer.setup()
 
