@@ -164,11 +164,11 @@ app = graph.compile(checkpointer=checkpointer)
 
 
 if __name__ == "__main__":
-   config = {
-    "configurable": {
-        "thread_id": "user_sachin"
+    config = {
+        "configurable": {
+            "thread_id": "user_aarohi"
+        }
     }
-}
 
     user_input = input("Enter travel request: ")
 
