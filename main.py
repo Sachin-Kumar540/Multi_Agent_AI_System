@@ -166,7 +166,7 @@ app = graph.compile(checkpointer=checkpointer)
 if __name__ == "__main__":
    config = {
     "configurable": {
-        "thread_id": "Sachin_user"
+        "thread_id": "user_sachin"
     }
 }
 
